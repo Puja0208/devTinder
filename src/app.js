@@ -4,12 +4,30 @@ const express = require("express");
 const app = express();
 const port = 3000;
 
-/**Request handler */
-app.get("/user/:userId", (req, res) => {
-  console.log(req.params);
-  /**console.log(req.query) - to get query params */
-  res.send({ firstName: "john", lastName: "Doe" });
-});
+app.use(
+  "/user",
+  [
+    (req, res, next) => {
+      //Route handler
+      //   res.send("Route handler 1");
+      console.log("handling route");
+      next();
+      res.send("res");
+    },
+    (req, res) => {
+      //Route handler
+      //   res.send("Route handler 1");
+      console.log("handling route");
+      res.send("response 1");
+    },
+  ],
+  (req, res) => {
+    //Route handler
+    //   res.send("Route handler 1");
+    console.log("handling route");
+    res.send("response 1");
+  }
+);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
