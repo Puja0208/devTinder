@@ -4,30 +4,17 @@ const express = require("express");
 const app = express();
 const port = 3000;
 
-app.use(
-  "/user",
-  [
-    (req, res, next) => {
-      //Route handler
-      //   res.send("Route handler 1");
-      console.log("handling route");
-      next();
-      res.send("res");
-    },
-    (req, res) => {
-      //Route handler
-      //   res.send("Route handler 1");
-      console.log("handling route");
-      res.send("response 1");
-    },
-  ],
-  (req, res) => {
-    //Route handler
-    //   res.send("Route handler 1");
-    console.log("handling route");
-    res.send("response 1");
-  }
-);
+const { adminAuth } = require("./middlewares/auth");
+//Handle auth middleware
+app.use("/admin", adminAuth);
+
+app.use("/admin/getAllData", (req, res) => {
+  res.send("All data sent");
+});
+
+app.use("/admin/deleteuser", (req, res) => {
+  res.send("Deleted a user");
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
