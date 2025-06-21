@@ -6,6 +6,7 @@ const User = require("./models/user");
 const app = express();
 const port = 3000;
 
+app.use(express.json());
 connectDB()
   .then(() => {
     console.log("db connect success");
@@ -16,13 +17,7 @@ connectDB()
   .catch((err) => console.log(err));
 
 app.post("/signup", async (req, res) => {
-  const user = new User({
-    firstName: "John",
-    lastName: "Doe",
-    password: "sdaasd",
-    age: 26,
-    gender: "Male",
-  });
+  const user = new User(req.body);
   try {
     await user.save();
     res.send("user added successfully");
