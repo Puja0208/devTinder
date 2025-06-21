@@ -25,3 +25,27 @@ app.post("/signup", async (req, res) => {
     res.status(400).send(`error saving user:${error}`);
   }
 });
+
+app.get("/users", async (req, res) => {
+  try {
+    const users = await User.findOne({ lastName: req.body.lastName });
+    if (users.length === 0) {
+      res.status(404).send("User not found");
+    }
+    res.send(users);
+  } catch (error) {
+    res.status(400).send("Something went wrong");
+  }
+});
+
+app.get("/feed", async (req, res) => {
+  try {
+    const users = await User.find({});
+    if (users.length === 0) {
+      res.status(404).send("Users not found");
+    }
+    res.send(users);
+  } catch (error) {
+    res.status(400).send("Something went wrong");
+  }
+});
