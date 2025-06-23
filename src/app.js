@@ -2,6 +2,7 @@ const express = require("express");
 const connectDB = require("./config/database");
 const User = require("./models/user");
 
+
 //create a new express js application
 const app = express();
 const port = 3000;
