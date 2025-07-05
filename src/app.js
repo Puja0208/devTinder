@@ -5,6 +5,7 @@ const { validateSignUpData } = require("./utils/validation");
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
+const { userAuth } = require("./middlewares/auth");
 
 //create a new express js application
 const app = express();
@@ -68,76 +69,17 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/users", async (req, res) => {
+app.get("/profile", userAuth, async (req, res) => {
   try {
-    const users = await User.findOne({ lastName: req.body.lastName });
-    if (users.length === 0) {
-      res.status(404).send("User not found");
-    }
-    res.send(users);
-  } catch (error) {
-    res.status(400).send("Something went wrong");
-  }
-});
-
-app.get("/profile", async (req, res) => {
-  try {
-    const cookies = req.cookies;
-    const { token } = cookies;
-    if (!token) {
-      throw new Error("Invalid token");
-    }
-    const decodedMsg = await jwt.verify(token, "DEV@Tinder$670");
-    const { _id } = decodedMsg;
-    const user = await User.findById(_id);
-    console.log(`Loggedin user is ${_id}`);
+    const { user } = req;
     res.send(user);
   } catch (error) {
     res.status(400).send(`ERR: ${error.message}`);
   }
 });
 
-app.get("/feed", async (req, res) => {
-  try {
-    const users = await User.find({});
-    if (users.length === 0) {
-      res.status(404).send("Users not found");
-    }
-    res.send(users);
-  } catch (error) {
-    res.status(400).send("Something went wrong");
-  }
-});
-
-app.delete("/user", async (req, res) => {
-  const userId = req.body.userId;
-  try {
-    const user = await User.findByIdAndDelete(userId);
-    res.send("User deleted successfully");
-  } catch (error) {
-    res.status(400).send("Something went wrong");
-  }
-});
-
-app.patch("/user/:userId", async (req, res) => {
-  const userId = req.params?.userId;
-  const data = req.body;
-
-  const ALLOWED_UPDATES = ["about", "gender"];
-
-  const isUpdateAllowed = Object.keys(data).every((k) =>
-    ALLOWED_UPDATES.includes(k)
-  );
-
-  if (!isUpdateAllowed) {
-    return res.status(400).send("Update not allowed");
-  }
-  try {
-    const user = await User.findByIdAndUpdate(userId, data, {
-      runValidators: true,
-    });
-    res.send("User updated successfully");
-  } catch (error) {
-    res.status(400).send("Something went wrong");
-  }
+app.post("/sendConnectionRequest", userAuth, async (req, res) => {
+  const { user } = req;
+  console.log("sending a connect request");
+  res.send(`${user.firstName} sent connection request`);
 });
