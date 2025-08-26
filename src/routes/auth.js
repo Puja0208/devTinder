@@ -51,4 +51,12 @@ authRouter.post("/login", async (req, res) => {
   }
 });
 
+authRouter.post("/logout", async (req, res) => {
+  //Just expire thec ookie right there. no need for any authentication. no harm in calling logout api for all
+  res.cookie("token", null, {
+    expires: new Date(Date.now()),
+  });
+  res.send("Logout successful");
+});
+
 module.exports = authRouter;
