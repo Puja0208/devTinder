@@ -11,6 +11,7 @@ profileRouter
 - PATCH /profile/password - forgot password api
 
 connectRequestRouter
+POST  /request/send/:status/:userId - made status dynamic to ocver all status requests
 - POST /request/send/interested/:userId
 - POST /request/send/ignore/:userId
 - POST /request/review/accepted/:requestId
