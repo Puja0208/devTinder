@@ -22,6 +22,10 @@ const connectionRequestSchema = new mongoose.Schema(
   }
 );
 
+//1 - asc, -1 -> desc
+//connectionnRequest.find({fromuserId:32323233223232, toUserId:34324234234}) - make this query faster
+connectionRequestSchema.index({fromUserId:1, toUserId:1});
+
 connectionRequestSchema.pre("save", function (next) {
   const connectionRequest = this;
 
