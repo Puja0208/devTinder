@@ -3,6 +3,7 @@ const express = require("express");
 const { userAuth } = require("../middlewares/auth");
 const ConnectionRequest = require("../models/connectionRequest");
 const requestRouter = express.Router();
+const User = require("../models/user");
 
 requestRouter.post(
   "/request/send/:status/:toUserId",
@@ -17,6 +18,17 @@ requestRouter.post(
         return res
           .status(400)
           .json({ message: `Inavlid status type: ${status}` });
+      }
+      // console.log("val", fromUserId == toUserId);
+      // if (fromUserId == toUserId) {
+      //   return res.status(400).send("cannot send request to yourself");
+      // }
+
+      const toUser = await User.findById(toUserId);
+      if (!toUser) {
+        return res.status(404).json({
+          message: "user not found",
+        });
       }
 
       //check if there is an existing connection request
@@ -33,8 +45,10 @@ requestRouter.post(
         ],
       });
 
-      if(existingConnectionRequest){
-        return res.status(400).send({message:"Connection request already exists"})
+      if (existingConnectionRequest) {
+        return res
+          .status(400)
+          .send({ message: "Connection request already exists" });
       }
 
       const connectionRequest = new ConnectionRequest({
