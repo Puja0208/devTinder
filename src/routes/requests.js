@@ -64,7 +64,7 @@ requestRouter.post(
     } catch (error) {
       res.status(400).send(`ERROR: ${error.message}`);
     }
-    res.send(`${user.firstName} sent connection request`);
+   
   }
 );
 
