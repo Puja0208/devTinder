@@ -14,8 +14,8 @@ connectRequestRouter
 POST  /request/send/:status/:userId - made status dynamic to ocver all status requests
 - POST /request/send/interested/:userId
 - POST /request/send/ignore/:userId
-- POST /request/review/accepted/:requestId
-- POST /request/review/rejected/:requestId
+- POST /request/review/:status/:requestId
+- 
 
 - GET /user/connections
 - GET /user/requests/received
