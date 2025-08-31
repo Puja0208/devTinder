@@ -4,6 +4,7 @@ const connectionRequestSchema = new mongoose.Schema(
   {
     fromUserId: {
       type: mongoose.Schema.Types.ObjectId,
+      ref:"User",//Creates a releation between user and connection tables. A reference is crested. mesns this id is from user table
     },
     toUserId: {
       type: mongoose.Schema.Types.ObjectId,
