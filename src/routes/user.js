@@ -1,6 +1,7 @@
 const express = require("express");
 const { userAuth } = require("../middlewares/auth");
 const ConnectionRequest = require("../models/connectionRequest");
+const User = require("../models/user");
 const userRouter = express.Router();
 
 module.exports = userRouter;
@@ -55,6 +56,53 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
       message: "connections fetched",
       data,
     });
+  } catch (error) {
+    res.status(400).send(`Error: ${error.message}`);
+  }
+});
+
+//a usee whose profile is neither ignore/accepted/sent request
+
+userRouter.get("/feed", userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+    /*all user card to be shown except:
+        -own card
+        -his connections
+        -ignored people
+        -sent connection request
+        -rejected request
+        */
+    /**If there is an entey of A,B in request table they should not see each other's profile */
+
+    /**Find all conecrion request you sent or eeceived */
+    const connectionRequests = await ConnectionRequest.find({
+      $or: [
+        {
+          fromUserId: loggedInUser._id,
+        },
+        {
+          toUserId: loggedInUser._id,
+        },
+      ],
+    }).select(["fromUserId", "toUserId"]);
+
+    const hideUsersFromFeed = new Set();
+    connectionRequests.forEach((req) => {
+      hideUsersFromFeed.add(req.fromUserId.toString());
+      hideUsersFromFeed.add(req.toUserId.toString());
+    });
+
+    const users = await User.find({
+      $and: [
+        {
+          _id: { $nin: Array.from(hideUsersFromFeed) },
+        },
+        { _id: { $ne: loggedInUser._id } },
+      ],
+    });
+
+    res.send(users);
   } catch (error) {
     res.status(400).send(`Error: ${error.message}`);
   }
