@@ -39,10 +39,18 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
           status: "accepted",
         },
       ],
-    }).populate("fromUserId", ["firstName", "lastName"]);
+    })
+      .populate("fromUserId", ["firstName", "lastName"])
+      .populate("toUserId", ["firstName", "lastName"]);
 
     //filter data to only sen fro details not cpnnection details
-    const data = allConnections.map((row) => row.fromUserId);
+    const data = allConnections.map((row) => {
+      //cannot compare tow mongo ids directly so convert to string as they are in object id form
+      if (row.fromUserId._id.toString() === loggedInUser._id.toString()) {
+        return row.toUserId;
+      }
+      return row.fromUserId;
+    });
     res.json({
       message: "connections fetched",
       data,
