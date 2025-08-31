@@ -20,6 +20,9 @@ POST  /request/send/:status/:userId - made status dynamic to ocver all status re
 - GET /user/connections
 - GET /user/requests/received
 - GET /user/feed = gets profile of other users
+-pagination
+/feed?page=1&limit=10 - skip(0) limit(10)
+/feed?page=2&limit=10 - skip(10) limit(10)
 
 - Status - ignore, interested, accepted, rejected
 

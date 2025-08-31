@@ -66,6 +66,12 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
 userRouter.get("/feed", userAuth, async (req, res) => {
   try {
     const loggedInUser = req.user;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page-1)*limit;
+
+
+
     /*all user card to be shown except:
         -own card
         -his connections
@@ -93,6 +99,8 @@ userRouter.get("/feed", userAuth, async (req, res) => {
       hideUsersFromFeed.add(req.toUserId.toString());
     });
 
+
+
     const users = await User.find({
       $and: [
         {
@@ -100,7 +108,7 @@ userRouter.get("/feed", userAuth, async (req, res) => {
         },
         { _id: { $ne: loggedInUser._id } },
       ],
-    });
+    }).select(["firstName", "lastName", "emailId"]).skip(skip).limit(limit);
 
     res.send(users);
   } catch (error) {
