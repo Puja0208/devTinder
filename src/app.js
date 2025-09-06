@@ -8,15 +8,15 @@ const User = require("./models/user");
 //create a new express js application
 const app = express();
 const port = 3000;
-
-app.use(express.json());
-app.use(cookieParser());
 app.use(
   cors({
     origin: "http://localhost:5173",
     credentials: true,
   })
 );
+
+app.use(express.json());
+app.use(cookieParser());
 
 const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
