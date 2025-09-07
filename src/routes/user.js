@@ -14,7 +14,13 @@ userRouter.get("/user/requests/received", userAuth, async (req, res) => {
     const connectionRequests = await ConnectionRequest.find({
       toUserId: loggedInUser._id,
       status: "interested",
-    }).populate("fromUserId", ["firstName", "lastName"]); // can write seoncind param as as 'firstName lastName'
+    }).populate("fromUserId", [
+      "firstName",
+      "lastName",
+      "age",
+      "photoUrl",
+      "about",
+    ]); // can write seoncind param as as 'firstName lastName'
 
     return res.json({
       message: "all request",
@@ -41,8 +47,20 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
         },
       ],
     })
-      .populate("fromUserId", ["firstName", "lastName"])
-      .populate("toUserId", ["firstName", "lastName"]);
+      .populate("fromUserId", [
+        "firstName",
+        "lastName",
+        "age",
+        "photoUrl",
+        "about",
+      ])
+      .populate("toUserId", [
+        "firstName",
+        "lastName",
+        "age",
+        "photoUrl",
+        "about",
+      ]);
 
     //filter data to only sen fro details not cpnnection details
     const data = allConnections.map((row) => {
@@ -106,7 +124,7 @@ userRouter.get("/feed", userAuth, async (req, res) => {
         { _id: { $ne: loggedInUser._id } },
       ],
     })
-      .select(["firstName", "lastName", "emailId"])
+      .select(["firstName", "lastName", "emailId", "photoUrl"])
       .skip(skip)
       .limit(limit);
 
