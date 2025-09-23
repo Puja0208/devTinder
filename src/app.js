@@ -1,13 +1,15 @@
 const express = require("express");
+require("dotenv").config();
 const connectDB = require("./config/database");
 var cors = require("cors");
 
 const cookieParser = require("cookie-parser");
 const User = require("./models/user");
 
+
 //create a new express js application
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 app.use(
   cors({
     origin: "http://localhost:5173",
