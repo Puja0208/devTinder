@@ -3,6 +3,8 @@ require("dotenv").config();
 const connectDB = require("./config/database");
 var cors = require("cors");
 
+require("./utils/cronjob")
+
 const cookieParser = require("cookie-parser");
 const User = require("./models/user");
 
