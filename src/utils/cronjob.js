@@ -26,7 +26,7 @@ cron.schedule("0 * * * *", async () => {
       //send emails
       try {
         const res = await sendEmail.run(
-          "New friend request pending for" + toEmailid,
+          "New friend request pending for" + email
           "There are so may request opending.Please login to accept/reject it"
         );
         console.log(res);
