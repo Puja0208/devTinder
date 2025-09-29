@@ -11,7 +11,7 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
     const { firstName, lastName, emailId } = userAuth;
     const order = await razorpayInstance.orders.create({
       //always use backend to rely on amount. nver pasfrom frontend. can be prone to man in the middle attacks
-      amount: membershipAmount[membershipType]*100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      amount: membershipAmount[membershipType] * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
       currency: "INR",
       receipt: "receipt#1",
       notes: {
@@ -37,7 +37,7 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
     const savedPayment = await Payment.save();
 
     //return orderd etails to frontend
-    res.json({ ...savedPayment.toJSON() });
+    res.json({ ...savedPayment.toJSON(), keyId: process.env.RAZORPAY_KEY_ID });
   } catch (error) {}
 });
 
