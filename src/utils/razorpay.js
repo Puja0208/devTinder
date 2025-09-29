@@ -1,4 +1,4 @@
-const Razorpay = require("razorpay")
+const Razorpay = require("razorpay");
 var instance = new Razorpay({
   //key id and key secret will be found in your razorpay dashboard
   //put these in env files
@@ -6,4 +6,4 @@ var instance = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-modeule.exports = instance;
+module.exports = instance;
