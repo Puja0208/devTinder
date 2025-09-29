@@ -40,6 +40,10 @@ const paymentSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
+      emailId: {
+        type: String,
+        required: true,
+      },
       membershipType: {
         type: String,
         required: true,
