@@ -86,4 +86,22 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
     return req.status(500).send({ msg: error.message });
   }
 });
+
+//api to check payment status from client
+paymentRouter.get("/premium/verify", userAuth, async (req, res) => {
+  try {
+    const user = req.user;
+    if (user.isPremium) {
+      res.json({
+        isPremium: true,
+      });
+    } else {
+      res.json({
+        isPremium: false,
+      });
+    }
+  } catch (error) {
+    res.status(500).send({ error: error });
+  }
+});
 module.exports = paymentRouter;
