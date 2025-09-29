@@ -90,14 +90,18 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
 //api to check payment status from client
 paymentRouter.get("/premium/verify", userAuth, async (req, res) => {
   try {
-    const user = req.user;
+    //convert to json otherwise it is a mongodb object
+
+    const user = req.user.toJSON();
     if (user.isPremium) {
       res.json({
         isPremium: true,
+        user,
       });
     } else {
       res.json({
         isPremium: false,
+        user,
       });
     }
   } catch (error) {
