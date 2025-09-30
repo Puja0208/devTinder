@@ -13,7 +13,14 @@ const initializeSocket = (server) => {
       socket.join(roomId);
     });
 
-    socket.on("sendMessage", () => {});
+    socket.on("sendMessage", ({ firstName, userId, targetUserId, text }) => {
+      const roomId = [userId, targetUserId].sort().join("_");
+      console.log(`${firstName}: ${text}`);
+      io.to(roomId).emit("messageReceived", {
+        firstName,
+        text,
+      });
+    });
 
     socket.on("disconnect", () => {});
   });
