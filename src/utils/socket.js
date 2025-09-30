@@ -7,6 +7,11 @@ const initializeSocket = (server) => {
   });
   io.on("connection", (socket) => {
     //handle events
+    socket.on("joinChat", () => {});
+
+    socket.on("sendMessage", () => {});
+
+    socket.on("disconnect", () => {});
   });
 };
 
