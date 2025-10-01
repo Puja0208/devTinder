@@ -2,7 +2,7 @@ const socket = require("socket.io");
 const crypto = require("crypto");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
-const { Chat } = require("../models/chat");
+const Chat = require("../models/chat");
 
 const getSecretRoomId = (userId, targetUserId) => {
   return crypto
