@@ -3,6 +3,7 @@ const crypto = require("crypto");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const Chat = require("../models/chat");
+const ConnectionRequest = require("../models/connectionRequest");
 
 const getSecretRoomId = (userId, targetUserId) => {
   return crypto
@@ -56,6 +57,26 @@ const initializeSocket = (server) => {
         try {
           const roomId = getSecretRoomId(userId, targetUserId);
           console.log(`${firstName}: ${text}`);
+
+          //check if userId and target userId are friends
+          //then only allow to send msgs
+          /*
+          ConnectionRequest.findOne({
+            $or: [
+              {
+                fromUserId: userId,
+                toUserId: targetUserId,
+                status: "accepted",
+              },
+              {
+                fromUserId: targetUserId,
+                toUserId: userId,
+                status: "accepted",
+              },
+            ],
+          });
+          */
+
           //if chat exists, push msg in it otherwsie create new chat
           let chat = await Chat.findOne({
             participants: {
